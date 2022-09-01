@@ -7,8 +7,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -43,4 +46,19 @@ public class ExpenseController {
         model.addAttribute("expenses", expenseService.getAllExpenses());
         return "expenses-list";
     }
+
+    @GetMapping("/createExpense")
+    public String showExpenseForm(Model model){
+        model.addAttribute("expense", new ExpenseDTO());
+        return "expense-form";
+    }
+
+    @PostMapping("/saveOrUpdateExpense")
+    public String saveOrUpdateExpenseDetails(@ModelAttribute("expense") ExpenseDTO expenseDTO) throws ParseException {
+        System.out.println("Printing the Expense DTO: " +expenseDTO);
+        expenseService.saveExpenseDetails(expenseDTO);
+        return "redirect:/expenses";
+    }
+
+
 }

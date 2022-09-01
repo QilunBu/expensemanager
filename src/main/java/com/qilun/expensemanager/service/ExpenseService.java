@@ -8,7 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,6 +45,26 @@ public class ExpenseService {
 //        expenseDTO.setDescription(expense.getDescription());
 //        expenseDTO.setDate(expense.getDate());
 //        return expenseDTO;
+    }
+
+    public ExpenseDTO saveExpenseDetails(ExpenseDTO expenseDTO) throws ParseException {
+        //map the dto to entity
+        Expense expense = mapToEntity(expenseDTO);
+        //save entity  to database
+        expense = expenseRepository.save(expense);
+        //map the entity to dto
+        return mapToDTO(expense);
+    }
+
+    private Expense mapToEntity(ExpenseDTO expenseDTO) throws ParseException {
+        //map the dto to entity
+        Expense expense = modelMapper.map(expenseDTO, Expense.class);
+        //generate the expense id
+        expense.setExpenseId(UUID.randomUUID().toString());
+        //set the expense date
+        expense.setDate(DateTimeUtil.convertStringToDate(expenseDTO.getDateString()));
+        //return the expense entity
+        return expense;
     }
 
 }
