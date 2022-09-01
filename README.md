@@ -1,0 +1,2 @@
+# expensemanager
+Springboot thymleaf app
