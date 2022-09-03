@@ -40,9 +40,17 @@ public class ExpenseController {
 
     @GetMapping("/deleteExpense")
     public String deleteExpense(@RequestParam String id){
-        System.out.println("Print the expense id" + id);
+        System.out.println("Print the expense delete id: " + id);
         expenseService.deleteExpense(id);
         return "redirect:/expenses";
+    }
+
+    @GetMapping("/updateExpense")
+    public String updateExpense(@RequestParam String id, Model model){
+        System.out.println("Print the expense update id: " + id);
+        ExpenseDTO expense = expenseService.getExpenseById(id);
+        model.addAttribute("expense", expense);
+        return "expense-form";
     }
 
 }

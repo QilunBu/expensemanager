@@ -52,7 +52,9 @@ public class ExpenseService {
         //map the dto to entity
         Expense expense = modelMapper.map(expenseDTO, Expense.class);
         //generate the expense id
-        expense.setExpenseId(UUID.randomUUID().toString());
+        if (expense.getId() == null){
+            expense.setExpenseId(UUID.randomUUID().toString());
+        }
         //set the expense date
         expense.setDate(DateTimeUtil.convertStringToDate(expenseDTO.getDateString()));
         //return the expense entity
@@ -60,9 +62,16 @@ public class ExpenseService {
     }
 
     public void deleteExpense(String id){
-        Expense existingExpense = expenseRepository.findByExpenseId(id).orElseThrow(() -> new RuntimeException("Expense not found"));
+        Expense existingExpense = getExpense(id);
         expenseRepository.delete(existingExpense);
-
     }
 
+    public ExpenseDTO getExpenseById(String id){
+        Expense existingExpense = getExpense(id);
+        return mapToDTO(existingExpense);
+    }
+
+    private Expense getExpense(String id){
+        return expenseRepository.findByExpenseId(id).orElseThrow(() -> new RuntimeException("Expense not found"));
+    }
 }
