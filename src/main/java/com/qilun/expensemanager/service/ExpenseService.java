@@ -37,14 +37,6 @@ public class ExpenseService {
         ExpenseDTO expenseDTO = modelMapper.map(expense, ExpenseDTO.class);
         expenseDTO.setDateString(DateTimeUtil.convertDateToString(expenseDTO.getDate()));
         return expenseDTO;
-//        ExpenseDTO expenseDTO = new ExpenseDTO();
-//        expenseDTO.setId(expense.getId());
-//        expenseDTO.setExpenseId(expense.getExpenseId());
-//        expenseDTO.setAmount(expense.getAmount());
-//        expenseDTO.setName(expense.getName());
-//        expenseDTO.setDescription(expense.getDescription());
-//        expenseDTO.setDate(expense.getDate());
-//        return expenseDTO;
     }
 
     public ExpenseDTO saveExpenseDetails(ExpenseDTO expenseDTO) throws ParseException {
@@ -65,6 +57,12 @@ public class ExpenseService {
         expense.setDate(DateTimeUtil.convertStringToDate(expenseDTO.getDateString()));
         //return the expense entity
         return expense;
+    }
+
+    public void deleteExpense(String id){
+        Expense existingExpense = expenseRepository.findByExpenseId(id).orElseThrow(() -> new RuntimeException("Expense not found"));
+        expenseRepository.delete(existingExpense);
+
     }
 
 }
