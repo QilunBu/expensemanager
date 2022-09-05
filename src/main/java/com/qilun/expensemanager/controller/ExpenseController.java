@@ -1,6 +1,7 @@
 package com.qilun.expensemanager.controller;
 
 import com.qilun.expensemanager.dto.ExpenseDTO;
+import com.qilun.expensemanager.dto.ExpenseFilterDTO;
 import com.qilun.expensemanager.entity.Expense;
 import com.qilun.expensemanager.service.ExpenseService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class ExpenseController {
     @GetMapping("/expenses")
     public String showExpenseList(Model model){
         model.addAttribute("expenses", expenseService.getAllExpenses());
+        model.addAttribute("filter", new ExpenseFilterDTO());
         return "expenses-list";
     }
 

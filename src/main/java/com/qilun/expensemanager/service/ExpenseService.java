@@ -1,6 +1,7 @@
 package com.qilun.expensemanager.service;
 
 import com.qilun.expensemanager.dto.ExpenseDTO;
+import com.qilun.expensemanager.dto.ExpenseFilterDTO;
 import com.qilun.expensemanager.entity.Expense;
 import com.qilun.expensemanager.repository.ExpenseRepository;
 import com.qilun.expensemanager.util.DateTimeUtil;
@@ -9,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -20,10 +22,6 @@ public class ExpenseService {
     private final ExpenseRepository expenseRepository;
     private final ModelMapper modelMapper;
 
-//    @Autowired
-//    public ExpenseService(ExpenseRepository expenseRepository) {
-//        this.expenseRepository = expenseRepository;
-//    }
 
     public List<ExpenseDTO> getAllExpenses(){
         List<Expense> list = expenseRepository.findAll();
@@ -74,4 +72,27 @@ public class ExpenseService {
     private Expense getExpense(String id){
         return expenseRepository.findByExpenseId(id).orElseThrow(() -> new RuntimeException("Expense not found"));
     }
+
+    public List<ExpenseDTO> getFilteredExpenses(ExpenseFilterDTO expenseFilterDTO) throws ParseException {
+        String keyword = expenseFilterDTO.getKeyword();
+        String sortBy = expenseFilterDTO.getSortBy();
+        String startDateString = expenseFilterDTO.getStartDate();
+        String endDateString = expenseFilterDTO.getEndDate();
+
+        //validation if the user does not input start date or end date
+        Date startDate = !startDateString.isEmpty() ? DateTimeUtil.convertStringToDate(startDateString) : new Date(0);
+        Date endDate = !endDateString.isEmpty() ? DateTimeUtil.convertStringToDate(endDateString) : new Date(System.currentTimeMillis());
+
+        List<Expense> list = expenseRepository.findByNameContainingAndDateBetween(keyword, startDate, endDate);
+        List<ExpenseDTO> filteredList = list.stream().map(this::mapToDTO).collect(Collectors.toList());
+        if (sortBy.equals("date")){
+            //sort by expense date
+            filteredList.sort((o1, o2) -> o2.getDate().compareTo(o1.getDate()));
+        }else {
+            //sort by expense amount
+            filteredList.sort((o1, o2) -> o2.getAmount().compareTo(o1.getAmount()));
+        }
+        return filteredList;
+    }
+
 }
