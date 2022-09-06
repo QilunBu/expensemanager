@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -22,8 +24,11 @@ public class ExpenseController {
 
     @GetMapping("/expenses")
     public String showExpenseList(Model model){
-        model.addAttribute("expenses", expenseService.getAllExpenses());
+        List<ExpenseDTO> list = expenseService.getAllExpenses();
+        model.addAttribute("expenses", list);
         model.addAttribute("filter", new ExpenseFilterDTO());
+        String totalExpenses = expenseService.totalExpenses(list);
+        model.addAttribute("totalExpenses", totalExpenses);
         return "expenses-list";
     }
 

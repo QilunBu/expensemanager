@@ -8,6 +8,11 @@
 <body>
     <h1>List of Expenses</h1>
     <hr/>
+    <div>
+        <h2>You ae viewing the expenses totalling of
+        <span th:text="'&#8377;'+${totalExpenses}"></span>
+        </h2>
+    </div>
     <form method="get" th:object="${filter}" th:action="@{/filterExpenses}">
         Search by keyword:
         <input type="text" placeholder="Enter keyword" th:field="*{keyword}"/>
