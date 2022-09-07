@@ -8,11 +8,11 @@
 <body>
   <h1>Create New Expense</h1>
   <hr/>
-  <form th:action="@{/saveOrUpdateExpense}" th:object="${expense}" method="post">
+  <form th:action="@{/saveOrUpdateExpense}" th:object="${expense}" method="post" id="expenseform">
     <input type="text" placeholder="Enter expense name" th:field="*{name}" />
     <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
     <br/><br/>
-    <input type="text" placeholder="Enter expense amount" th:field="*{amount}" />
+    <input type="text" placeholder="Enter expense amount" th:field="*{amount}" id="amount" oninput="validateNumber(this);"/>
     <span th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></span>
     <br/><br/>
     <input type="text" th:field="*{dateString}" placeholder="dd/mm/yyyy" id="createdAt" />
@@ -31,6 +31,7 @@
   </div>
   <script th:src="@{/js/jquery.js}"></script>
   <script th:src="@{/js/jquery-ui.js}"></script>
+  <script th:src="@{/js/jquery-validator.js}"></script>
   <script th:src="@{/js/expense-form.js}"></script>
 
 </body>
