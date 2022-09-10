@@ -4,6 +4,7 @@ import com.ibm.icu.text.NumberFormat;
 import com.qilun.expensemanager.dto.ExpenseDTO;
 import com.qilun.expensemanager.dto.ExpenseFilterDTO;
 import com.qilun.expensemanager.entity.Expense;
+import com.qilun.expensemanager.entity.User;
 import com.qilun.expensemanager.repository.ExpenseRepository;
 import com.qilun.expensemanager.util.DateTimeUtil;
 import lombok.RequiredArgsConstructor;
@@ -24,10 +25,12 @@ public class ExpenseService {
 
     private final ExpenseRepository expenseRepository;
     private final ModelMapper modelMapper;
+    private final UserService userService;
 
 
     public List<ExpenseDTO> getAllExpenses(){
-        List<Expense> list = expenseRepository.findAll();
+        User user = userService.getLoggedInUser();
+        List<Expense> list = expenseRepository.findByUserId(user.getId());
         List<ExpenseDTO> expenseList = list.stream().map(this::mapToDTO).collect(Collectors.toList());
         return expenseList;
     }
@@ -43,6 +46,8 @@ public class ExpenseService {
     public ExpenseDTO saveExpenseDetails(ExpenseDTO expenseDTO) throws ParseException {
         //map the dto to entity
         Expense expense = mapToEntity(expenseDTO);
+        //add the login user to the expense entity
+        expense.setUser(userService.getLoggedInUser());
         //save entity  to database
         expense = expenseRepository.save(expense);
         //map the entity to dto
@@ -85,8 +90,8 @@ public class ExpenseService {
         //validation if the user does not input start date or end date
         Date startDate = !startDateString.isEmpty() ? DateTimeUtil.convertStringToDate(startDateString) : new Date(0);
         Date endDate = !endDateString.isEmpty() ? DateTimeUtil.convertStringToDate(endDateString) : new Date(System.currentTimeMillis());
-
-        List<Expense> list = expenseRepository.findByNameContainingAndDateBetween(keyword, startDate, endDate);
+        User user = userService.getLoggedInUser();
+        List<Expense> list = expenseRepository.findByNameContainingAndDateBetweenAndUserId(keyword, startDate, endDate, user.getId());
         List<ExpenseDTO> filteredList = list.stream().map(this::mapToDTO).collect(Collectors.toList());
         if (sortBy.equals("date")){
             //sort by expense date
