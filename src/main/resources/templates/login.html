@@ -16,6 +16,9 @@
           <div th:if="${param.error}">
               Invalid username or password
           </div>
+          <div th:if="${param.logout}">
+              You have been logged out from the applocation
+          </div>
           <input type="text" name="email" placeholder="Enter email">
           <br/><br/>
           <input type="password" name="password" placeholder="Enter password">
