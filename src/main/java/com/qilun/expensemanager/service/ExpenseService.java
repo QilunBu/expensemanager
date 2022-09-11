@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -31,7 +32,10 @@ public class ExpenseService {
 
     public List<ExpenseDTO> getAllExpenses(){
         User user = userService.getLoggedInUser();
-        List<Expense> list = expenseRepository.findByUserId(user.getId());
+        List<Expense> list = expenseRepository.findByDateBetweenAndUserId(
+                java.sql.Date.valueOf(LocalDate.now().withDayOfMonth(1)),
+                java.sql.Date.valueOf(LocalDate.now()),
+                user.getId());
         List<ExpenseDTO> expenseList = list.stream().map(this::mapToDTO).collect(Collectors.toList());
         return expenseList;
     }
@@ -47,6 +51,10 @@ public class ExpenseService {
     public ExpenseDTO saveExpenseDetails(ExpenseDTO expenseDTO) throws ParseException {
         //map the dto to entity
         Expense expense = mapToEntity(expenseDTO);
+        //handle exception for future dates
+        if (!expense.getDate().before(new java.util.Date())){
+            throw new RuntimeException("Future date is not allowed");
+        }
         //add the login user to the expense entity
         expense.setUser(userService.getLoggedInUser());
         //save entity  to database

@@ -4,6 +4,7 @@ import com.qilun.expensemanager.dto.ExpenseDTO;
 import com.qilun.expensemanager.dto.ExpenseFilterDTO;
 import com.qilun.expensemanager.entity.Expense;
 import com.qilun.expensemanager.service.ExpenseService;
+import com.qilun.expensemanager.util.DateTimeUtil;
 import com.qilun.expensemanager.validator.ExpenseValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -29,7 +30,7 @@ public class ExpenseController {
     public String showExpenseList(Model model){
         List<ExpenseDTO> list = expenseService.getAllExpenses();
         model.addAttribute("expenses", list);
-        model.addAttribute("filter", new ExpenseFilterDTO());
+        model.addAttribute("filter", new ExpenseFilterDTO(DateTimeUtil.getCurrentMonthStartDate(), DateTimeUtil.getCurrentMonthDate()));
         String totalExpenses = expenseService.totalExpenses(list);
         model.addAttribute("totalExpenses", totalExpenses);
         return "expenses-list";
