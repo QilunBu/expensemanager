@@ -5,6 +5,7 @@ import com.qilun.expensemanager.dto.ExpenseDTO;
 import com.qilun.expensemanager.dto.ExpenseFilterDTO;
 import com.qilun.expensemanager.entity.Expense;
 import com.qilun.expensemanager.entity.User;
+import com.qilun.expensemanager.exception.ExpenseNotFoundException;
 import com.qilun.expensemanager.repository.ExpenseRepository;
 import com.qilun.expensemanager.util.DateTimeUtil;
 import lombok.RequiredArgsConstructor;
@@ -78,7 +79,7 @@ public class ExpenseService {
     }
 
     private Expense getExpense(String id){
-        return expenseRepository.findByExpenseId(id).orElseThrow(() -> new RuntimeException("Expense not found"));
+        return expenseRepository.findByExpenseId(id).orElseThrow(() -> new ExpenseNotFoundException("Expense not found for the id:"+id));
     }
 
     public List<ExpenseDTO> getFilteredExpenses(ExpenseFilterDTO expenseFilterDTO) throws ParseException {
