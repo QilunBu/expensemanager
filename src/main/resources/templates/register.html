@@ -3,28 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <title>Register - Expense Manager</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}" />
+    <link rel="stylesheet" th:href="@{/css/base.css}" />
+    <link rel="stylesheet" th:href="@{/css/login.css}" />
 </head>
 <body>
-  <h1>Register New User</h1>
-  <hr/>
-  <form th:object="${user}" th:action="@{/register}" method="post" id="registerForm">
-      <input type="text" placeholder="Enter name" th:field="*{name}"/>
-      <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
-      <br/><br/>
-      <input type="text" placeholder="Enter email" th:field="*{email}"/>
-      <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
-      <br/><br/>
-      <input type="password" placeholder="Enter password" th:field="*{password}" />
-      <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
-      <br/><br/>
-      <input type="password" placeholder="Enter confirm password" th:field="*{confirmpassword}" />
-      <br/><br/>
-      <button type="submit">Submit</button>
-  </form>
-  <a th:href="@{/login}">Login</a>
-  <script th:src="@{/js/jquery.js}"></script>
-  <script th:src="@{/js/jquery-validator.js}"></script>
-  <script th:src="@{/js/register.js}"></script>
+<div class="box-layout justify-content-center">
+    <div class="card box-layout__box text-center">
 
+        <div class="card-header border-bottom-0 pb-0 bg-white">
+
+            <h1 class="box-layout__title">Register</h1>
+            <p class="box-layout__title">Sign up today and take control of your expenses!</p>
+        </div>
+
+        <div class="card-body pt-0">
+            <form th:object="${user}" th:action="@{/register}" method="post" id="registerForm">
+                <input type="text"
+                       placeholder="Enter name"
+                       th:field="*{name}"
+                       class="form-control mb-3"
+                       autofocus="autofocus" />
+                <span th:if="${#fields.hasErrors('name')}"
+                      th:errors="*{name}"></span>
+
+                <input type="text"
+                       placeholder="Enter email"
+                       th:field="*{email}"
+                       class="form-control mb-3" />
+                <span th:if="${#fields.hasErrors('email')}"
+                      th:errors="*{email}"></span>
+
+                <input type="password"
+                       placeholder="Enter password"
+                       th:field="*{password}"
+                       class="form-control mb-3" />
+                <span th:if="${#fields.hasErrors('password')}"
+                      th:errors="*{password}"></span>
+
+                <input type="password"
+                       placeholder="Enter confirm password"
+                       th:field="*{confirmpassword}"
+                       class="form-control mb-3" />
+
+                <button type="submit" class="btn button_default form-control">Submit</button>
+            </form>
+        </div>
+        <div class="card-footer bg-white border-top-0">
+                <span class="float-right">
+                    Existing User? - <a th:href="@{/login}" class="base-color font-weight-bold">Login</a>
+                </span>
+        </div>
+    </div>
+</div>
+<script th:src="@{/js/jquery.js}"></script>
+<script th:src="@{/js/jquery-validator.js}"></script>
+<script th:src="@{/js/bootstrap.js}"></script>
+<script th:src="@{/js/register.js}"></script>
 </body>
 </html>
+

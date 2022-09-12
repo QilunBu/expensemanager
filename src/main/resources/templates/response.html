@@ -3,24 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}" />
+    <link rel="stylesheet" th:href="@{/css/base.css}" />
+    <link rel="stylesheet" th:href="@{/css/response.css}" />
 </head>
 <body>
-<div th:if="${successMsg}">
+<nav class="fixed-top bg-header-color py-4">
+    <div class="app-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <a th:href="@{/expenses}" class="text-white">
+                        <span class="font-size-medium font-weight-bold">
+                            Expense Manager
+                        </span>
+            </a>
+        </div>
+    </div>
+</nav>
+<div th:if="${successMsg}" class="container p-5 my-5 border container-top-margin">
     <h1>Success!</h1>
     <p>Thanks for Registering your account. Now you can start adding your expenses!</p>
-    <a th:href="@{/login}">Login</a>
+    <a th:href="@{/login}" class="btn button_default">Login Now</a>
 </div>
-  <div th:if="${notFound}">
-    <h1>Expense not Available</h1>
+<div th:if="${notFound}" class="container p-5 my-5 border container-top-margin">
+    <h1>Expense Not Available</h1>
     <p th:text="${message}"></p>
-    <a th:href="@{/expenses}">Home</a>
-  </div>
-  <div th:if="${serverError}">
-      <h1>Contact administrator</h1>
-      <p> Something went wrong! please contact administrator</p>
-      <p th:text="${message}"></p>
-      <a th:href="@{/expenses}">Home</a>
-  </div>
-
+    <a th:href="@{/expenses}" class="btn button_default">Home</a>
+</div>
+<div th:if="${serverError}" class="container p-5 my-5 border container-top-margin">
+    <h1>Contact Administrator</h1>
+    <p>Something went wrong! Please contact administrator or write an email to qbuu0001@gmail.com</p>
+    <p th:text="${message}"></p>
+    <a th:href="@{/expenses}" class="btn button_default">Home</a>
+</div>
+<footer class="py-5">
+    <div class="container">
+        <p class="m-0 text-center text-dark">
+            Copyright &copy; Expense Manager - 2022 Designed and Developed by Qilun Bu (qbuu0001@gmail.com)
+        </p>
+    </div>
+</footer>
+<script th:src="@{/js/bootstrap.js}"></script>
 </body>
 </html>
